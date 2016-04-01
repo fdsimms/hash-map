@@ -3,11 +3,11 @@ require_relative 'linked_list'
 class HashMap
   include Enumerable
 
-  attr_accessor :set, :size, :num_buckets
+  attr_accessor :buckets, :size, :num_buckets
 
   def initialize(items = [])
     @num_buckets = 5
-    @set = Array.new(@num_buckets) { LinkedList.new }
+    @buckets = Array.new(@num_buckets) { LinkedList.new }
     @size = 0
 
     unless items.empty?
@@ -26,7 +26,7 @@ class HashMap
       insert(key, val)
     else
       self.size += 1
-      set[key.hash % num_buckets].insert(key, val)
+      buckets[key.hash % num_buckets].insert(key, val)
     end
 
     val
@@ -36,22 +36,22 @@ class HashMap
 
   def resize
     self.num_buckets *= 2
-    new_set = Array.new(num_buckets) { LinkedList.new }
+    new_buckets = Array.new(num_buckets) { LinkedList.new }
 
-    set.each do |bucket|
+    buckets.each do |bucket|
       bucket.each do |linked_list|
         idx = linked_list.key.hash % num_buckets
-        new_set[idx].insert(linked_list.key, linked_list.val)
+        new_buckets[idx].insert(linked_list.key, linked_list.val)
       end
     end
 
-    self.set = new_set
+    self.buckets = new_buckets
   end
 
   def get(key)
     idx = key.hash % num_buckets
 
-    set[idx].each do |node|
+    buckets[idx].each do |node|
       return node.val if node.key == key
     end
 
@@ -63,7 +63,7 @@ class HashMap
   def remove(key)
     idx = key.hash % num_buckets
 
-    bucket = set[idx]
+    bucket = buckets[idx]
     self.size -= 1
 
     if bucket.include?(key)
@@ -74,13 +74,13 @@ class HashMap
   def include?(key)
     idx = key.hash % num_buckets
 
-    set[idx].include?(key)
+    buckets[idx].include?(key)
   end
 
   alias :has_key? :include?
 
   def each(&blk)
-    set.each do |bucket|
+    buckets.each do |bucket|
       bucket.each do |node|
         blk.call(node.key, node.val)
       end
