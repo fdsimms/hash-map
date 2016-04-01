@@ -1,3 +1,5 @@
+require_relative 'linked_list'
+
 class HashMap
   include Enumerable
 
@@ -23,6 +25,8 @@ class HashMap
     val
   end
 
+  alias :[]= :insert
+
   def resize
     self.num_buckets *= 2
     new_set = Array.new(num_buckets) { LinkedList.new }
@@ -36,6 +40,18 @@ class HashMap
 
     self.set = new_set
   end
+
+  def get(key)
+    idx = key.hash % num_buckets
+
+    set[idx].each do |node|
+      return node.val if node.key == key
+    end
+
+    nil
+  end
+
+  alias :[] :get
 
   def remove(key)
     idx = key.hash % num_buckets

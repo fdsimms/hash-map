@@ -1,3 +1,5 @@
+require_relative 'linked_list_node'
+
 class LinkedList
   include Enumerable
 
