@@ -70,6 +70,8 @@ class HashMap
     set[idx].include?(key)
   end
 
+  alias :has_key? :include?
+
   def each(&blk)
     set.each do |bucket|
       bucket.each do |node|
