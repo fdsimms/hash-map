@@ -5,11 +5,18 @@ class HashMap
 
   attr_accessor :set, :size, :num_buckets
 
-  def initialize(vals = [])
+  def initialize(items = [])
     @num_buckets = 5
     @set = Array.new(@num_buckets) { LinkedList.new }
     @size = 0
-    vals.each { |val| insert(val) } unless vals.empty?
+
+    unless items.empty?
+      items.each do |item|
+        key = item.first
+        val = item.last
+        insert(key, val)
+      end
+    end
   end
 
   def insert(key, val)
@@ -78,5 +85,10 @@ class HashMap
         blk.call(node.key, node.val)
       end
     end
+  end
+
+  def inspect
+    all_items = map { |key, val| "#{key} => #{val}"}.join(", ")
+    "{#{all_items}}".inspect
   end
 end
