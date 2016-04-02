@@ -2,7 +2,7 @@
 
 ## Summary
 
-This is a simple implementation of a hash map in Ruby that I did for fun. It could feasibly replace Ruby's built-in Hash class.  
+This is a simple implementation of a hash map in Ruby that I did as an exercise just for fun. It could feasibly replace Ruby's built-in Hash class, but really that would be sort of pointless.  
 
 ## Usage
 
